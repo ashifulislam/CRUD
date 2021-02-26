@@ -15,7 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-    return view('products.view_products',['products'=>$products]);
+        return view('products.view_products',['products'=>$products]);
     }
 
     /**
@@ -36,9 +36,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-    //store data into the database
-//        return redirect()->route('products.index')
-//            ->with('success','Product created successfully.');
+
         $request->validate([
             'title'=>'required',
             'description'=>'required',
@@ -78,6 +76,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+
     }
 
     /**
@@ -89,7 +88,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $products = Product::find($id);
-       return view('products.edit_products')
+        return view('products.edit_products')
            ->with('products',$products);
 
     }
@@ -103,7 +102,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        //check the image file is clicked or not
+        if($request->has('image'))
+        {
+            $image = $request->file('image');
+            //get the image extension here
+            $re_image = time(). '.'.$image->extension();
+            $destination = public_path('images');
+            $image->move($destination,$re_image);
+            //getting value from the requests
+            $title = $request->input('title');
+            $description = $request->input('description');
+            $price = $request->input('price');
+
+            Product::where('id',$id)->update(array('Title'=>$title,'Description'=>$description,'Price'=>$price,'Image'=>$re_image));
+            return redirect('products')->with('Update','Products are updated successfully');
+
+        }
+        else
+        {
+            return redirect('products/create')->with('choose_file','Please choose the image file');
+        }
+
+
     }
 
     /**
@@ -114,10 +136,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return $id;
 
         $products = Product::find($id);
-        dump($products);
+
+        $image_path = "images/".$products->Image;
+
+        if (file_exists($image_path)) {
+
+            @unlink($image_path);
+
+        }
         $products->delete();
         return redirect('products')
             ->with('Delete','Products are successfully deleted');

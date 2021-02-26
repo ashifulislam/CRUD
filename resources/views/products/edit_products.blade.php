@@ -2,8 +2,9 @@
 @section('content')
 <body>
 
-<form name="add_product" enctype="multipart/form-data" method="post" action="{{route('products.store')}}">
+<form name="edit_product" enctype="multipart/form-data" method="post" action="{{route('products.update',[$products->id])}}">
     @csrf
+    @method('PUT')
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">
             <h1>Edit Product</h1>
@@ -43,7 +44,7 @@
 {{--            <input type="checkbox" class="form-check-input" id="exampleCheck1">--}}
 {{--            <label class="form-check-label" for="exampleCheck1">Check me out</label>--}}
 {{--        </div>--}}
-        <button type="submit" class="btn btn-primary">ADD</button>
+        <button type="submit" class="btn btn-primary">UPDATE</button>
     </div>
 
 </form>
