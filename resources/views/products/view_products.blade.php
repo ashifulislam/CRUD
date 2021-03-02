@@ -4,7 +4,6 @@
     <div>
         <table id="example" class="table table-striped table-bordered" style="width:80%;margin-left:120px;">
             <thead>
-
             @if(session('Success'))
                 <div class="alert alert-success"> {{ Session::get('Success') }}</div>
             @elseif(session('Delete'))
@@ -13,7 +12,6 @@
                 <div class="alert alert-danger">{{Session::get('Update')}}</div>
                 @endif
             <a href="{{route('products.create')}}" style="margin-left:120px;">Add New Product</a>
-
             <tr>
                 <th>ID</th>
                 <th>TITLE</th>
@@ -34,7 +32,6 @@
                 <td>
                     <img src="{{asset('images')}}/{{$single_product->Image}}" style="max-height: 60px;"/>
                 </td>
-{{--                {{route('approveCandidates',[$singleCandidate->candidate_id])}}--}}
                 <td><a href="{{route('products.edit',[$single_product->id])}}">EDIT</a></td>
                 <td>
                     <form action="{{route('products.destroy',[$single_product->id])}}" method="post">
@@ -45,10 +42,6 @@
                 </td>
             </tr>
             @endforeach
-
             </tbody>
-
         </table>
-
-
 @endsection

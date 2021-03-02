@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+        //Getting all products
         $products = Product::all();
         return view('products.view_products',['products'=>$products]);
     }
@@ -36,7 +43,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
+        //Storing product information
         $request->validate([
             'title'=>'required',
             'description'=>'required',
@@ -48,16 +55,16 @@ class ProductController extends Controller
         $product_details->description = $request->input('description');
         $product_details->price = $request->input('price');
 
-      //check the image file is clicked or not
+      //Checking the image file is clicked or not
         if($request->has('image'))
         {
         $image = $request->file('image');
-        //get the image extension here
+        //Getting the image extension here
         $re_image = time(). '.'.$image->extension();
         $destination = public_path('images');
+        //Image is saved to the public folder called images
         $image->move($destination,$re_image);
         $product_details->Image = $re_image;
-
         }
         else
             {
@@ -87,6 +94,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        //Editing product information with the specific id
         $products = Product::find($id);
         return view('products.edit_products')
            ->with('products',$products);
@@ -102,16 +110,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Updating information for specific product
+        $request->validate([
+            'title'=>'required',
+            'description'=>'required',
+            'price'=>'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
+        ]);
 
-        //check the image file is clicked or not
+        //Check the image file is clicked or not
         if($request->has('image'))
         {
             $image = $request->file('image');
-            //get the image extension here
+            //Get the image extension here
             $re_image = time(). '.'.$image->extension();
             $destination = public_path('images');
             $image->move($destination,$re_image);
-            //getting value from the requests
+            //Getting value from the requests
             $title = $request->input('title');
             $description = $request->input('description');
             $price = $request->input('price');
@@ -136,12 +151,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-
+        //Deleting information of the specific product
         $products = Product::find($id);
-
         $image_path = "images/".$products->Image;
-
-        if (file_exists($image_path)) {
+        if (file_exists($image_path))
+        {
 
             @unlink($image_path);
 

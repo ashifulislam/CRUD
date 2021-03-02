@@ -1,7 +1,6 @@
 @extends('layouts_of_products.master')
 @section('content')
 <body>
-
 <form name="add_product" enctype="multipart/form-data" method="post" action="{{route('products.store')}}">
     @csrf
     <div class="col-md-4 col-md-offset-4">
@@ -37,14 +36,8 @@
         @if(session('choose_file'))
             <div class="alert alert-danger"> {{ Session::get('choose_file') }}</div>
         @endif
-{{--        <div class="form-group form-check">--}}
-{{--            <input type="checkbox" class="form-check-input" id="exampleCheck1">--}}
-{{--            <label class="form-check-label" for="exampleCheck1">Check me out</label>--}}
-{{--        </div>--}}
         <button type="submit" class="btn btn-primary">ADD</button>
     </div>
-
 </form>
-
 </body>
 @endsection
